@@ -1,0 +1,7 @@
+left_header 294 611 5 85 A
+right_header 909 728 6 85 B
+top_menu 292 1032 93 63 C
+most_popular 499 1077 158 684 D
+left_menu 324 159 168 940 E
+other 499 1071 847 464 F
+footer 319 1265 1319 385 G
