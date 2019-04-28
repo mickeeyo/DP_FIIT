@@ -11,7 +11,7 @@ def help():
 	print(":param file - aoi text file with coordinates\n\n@return aoi - aoi dict represent in polygons")
 
 
-def load_and_process_aoi(file = AOI_DATA[0]):
+def load_and_process_aoi(AOI_PATH = AOI_PATH, file = AOI_DATA[0]):
 	'''
 	:param file - aoi text file with coordinates
 

@@ -16,14 +16,23 @@ MONITOR_HEIGHT = 32.4 # Monitor height in cm
 MONITOR_VERTICAL_RESOLUTION = 1200 # Vertical resolution of the monitor
 MONITOR_HORIZONTAL_RESOLUTION = 1900 # # Horizontal resolution of the monitor
 
-PATH_BEGIN = "data/calibration_data_begin/"
-PATH_BEGIN_END = "data/calibration_data_begin_end/"
+#PATH_BEGIN = "../data/calibration_data_begin/"
+#PATH_BEGIN = "../MSVN-Data/calibration_data/"
+#PATH_BEGIN_END = "data/calibration_data_begin_end/"
 
 TASK_FILE_NAMES = ['V1_190x120.png', 'V2_950x120.png', 'V3_1710x120.png',
 	   'V4_190x600.png', 'V5_950x600.png', 'V6_1710x600.png',
 	   'V7_190x1080.png', 'V8_950x1080.png', 'V9_1710x1080.png',
 	   'VA_950x600.png', 'VB_950x600.png', 'VC_950x600.png',
 	   'VD_950x600.png']
+	   
+
+TASK_FILE_NAMES_TSV = ['V1_190x120.tsv', 'V2_950x120.tsv', 'V3_1710x120.tsv',
+	   'V4_190x600.tsv', 'V5_950x600.tsv', 'V6_1710x600.tsv',
+	   'V7_190x1080.tsv', 'V8_950x1080.tsv', 'V9_1710x1080.tsv',
+	   'VA_950x600.png', 'VB_950x600.png', 'VC_950x600.png',
+	   'VD_950x600.png']
+	   
 	   
 CALIBRATING_POINTS = [
 					[190, 120],
@@ -87,9 +96,10 @@ def get_distances_precision(df, precision, participant_name):
 		last_gaze_point = [row["GazePointX (MCSpx)"], row["GazePointY (MCSpx)"]]
 	
 	
-def calculate_accuracy_precision(which = "begin"):
+def calculate_accuracy_precision(PATH_CALIB, which = "begin"):
 	if(which == "begin"):
-		PATH = PATH_BEGIN
+		PATH = PATH_CALIB
+		#PATH = PATH_BEGIN
 	elif(which == "end"):
 		PATH = PATH_BEGIN_END
 	else:
@@ -100,10 +110,11 @@ def calculate_accuracy_precision(which = "begin"):
 	
 	# For first 8 calibrating files 
 	for i in range(0,9):
-
-		recording_by_point = pd.read_csv(PATH + "/V" + str(i + 1) + "_" + 
-								str(CALIBRATING_POINTS[i][0]) + "x" + str(CALIBRATING_POINTS[i][1]) + ".tsv", sep="\t")
-
+		t_ = i + 1
+		#recording_by_point = pd.read_csv(PATH + "/V" + str(t_) + "_" + str(CALIBRATING_POINTS[i][0]) + "x" + str(CALIBRATING_POINTS[i][1]) + ".tsv", sep="\t")
+		
+		recording_by_point = pd.read_csv(PATH + "/" + TASK_FILE_NAMES_TSV[i], sep="\t")
+		
 		# get participant names from recoring
 		participants_names = recording_by_point['ParticipantName'].unique()
 		for participant in participants_names:
@@ -178,7 +189,7 @@ def calculate_accuracy_precision(which = "begin"):
 	
 	return [df_accuracy, df_precision]
 	
-def get_testers_to_filter_begin_end(tresh_count, ac_tresh_begin, pr_tresh_begin, ac_tresh_end, pr_tresh_end, ac_tresh_between, pr_tresh_between):
+def get_testers_to_filter_begin_end(PATH_CALIB, tresh_count, ac_tresh_begin, pr_tresh_begin, ac_tresh_end, pr_tresh_end, ac_tresh_between, pr_tresh_between):
 	'''
 	 # The beginning - calibration data before tasks 
 	 # The end - calibration data after tasks 
@@ -206,9 +217,9 @@ def get_testers_to_filter_begin_end(tresh_count, ac_tresh_begin, pr_tresh_begin,
 	'''
 
 	# Get calibration files from the beginning
-	df_ac_pr_begin = calculate_accuracy_precision("begin")
+	df_ac_pr_begin = calculate_accuracy_precision(PATH_CALIB, "begin")
 	# Get calibration values from the end
-	df_ac_pr_end = calculate_accuracy_precision("end")
+	df_ac_pr_end = calculate_accuracy_precision(PATH_CALIB, "end")
 	
 	# Accuracy (ac) and precision (pr) from the beginning
 	df_ac_begin = df_ac_pr_begin[0]
@@ -276,7 +287,7 @@ def get_testers_to_filter_begin_end(tresh_count, ac_tresh_begin, pr_tresh_begin,
 	return testers_to_filter
 
 	
-def get_testers_to_filter_begin(tresh_count, ac_tresh_begin, pr_tresh_begin):
+def get_testers_to_filter_begin(PATH_CALIB, tresh_count, ac_tresh_begin, pr_tresh_begin):
 	'''
 	 # The beginning - calibration data before tasks 
 	:param tresh_count - how many values should user have invalid to be filtered
@@ -295,7 +306,7 @@ def get_testers_to_filter_begin(tresh_count, ac_tresh_begin, pr_tresh_begin):
 	'''
 
 	# Get calibration files from the beginning
-	df_ac_pr_begin = calculate_accuracy_precision("begin")
+	df_ac_pr_begin = calculate_accuracy_precision(PATH_CALIB, "begin")
 	
 	# Accuracy (ac) and precision (pr) from the beginning
 	df_ac_begin = df_ac_pr_begin[0]

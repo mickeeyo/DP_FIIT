@@ -12,7 +12,7 @@ def help():
 	print(":param df - dataframe with data\n:param code - represents highest possible code for eyes to be considered as valid\n:percentage - how many percentage of valid data should be at least to have valid data for participant\n\n@return df - filtered dataset")
 
 
-def calibration_filter(df, type, tresh_count = 2, ac_tresh_begin = 0.95, pr_tresh_begin = 0.95, ac_tresh_end = 0.95, pr_tresh_end = 0.95, ac_tresh_between = 0.95, pr_tresh_between = 0.95):
+def calibration_filter(df, type, PATH_CALIB, tresh_count = 2, ac_tresh_begin = 0.95, pr_tresh_begin = 0.95, ac_tresh_end = 0.95, pr_tresh_end = 0.95, ac_tresh_between = 0.95, pr_tresh_between = 0.95):
 	'''
 	 # The beginning - calibration data before tasks 
 	 # The end - calibration data after tasks 
@@ -20,6 +20,7 @@ def calibration_filter(df, type, tresh_count = 2, ac_tresh_begin = 0.95, pr_tres
 	*REQUIRED
 	:param df - dataframe to be filtered
 	:param type - type of filtration (only from the beginning OR beginning and the end)
+	:param PATH_CALIB - path to calibration data
 	:param tresh_count - how many values should user have invalid to be filtered
 	:param ac_tresh_begin - accuracy treshold between mean and data from the beginning
 	:param pr_tresh_begin - precision treshold between mean and data from the beginning
@@ -40,12 +41,12 @@ def calibration_filter(df, type, tresh_count = 2, ac_tresh_begin = 0.95, pr_tres
 		if(tresh_count > 2):
 			tresh_count = 2
 			
-		testers_to_filter = dvf.get_testers_to_filter_begin(tresh_count, ac_tresh_begin, pr_tresh_begin)
+		testers_to_filter = dvf.get_testers_to_filter_begin(PATH_CALIB, tresh_count, ac_tresh_begin, pr_tresh_begin)
 	elif(type == "end"):
 		if(tresh_count > 6):
 			tresh_count = 6
 			
-		testers_to_filter = dvf.get_testers_to_filter_begin_end(tresh_count, ac_tresh_begin, pr_tresh_begin, ac_tresh_end, pr_tresh_end, ac_tresh_between, pr_tresh_between)
+		testers_to_filter = dvf.get_testers_to_filter_begin_end(PATH_CALIB, tresh_count, ac_tresh_begin, pr_tresh_begin, ac_tresh_end, pr_tresh_end, ac_tresh_between, pr_tresh_between)
 	
 	if(len(testers_to_filter) > 0):
 		df = dvf.filter_testers_from_dataset(df, testers_to_filter)

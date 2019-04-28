@@ -18,8 +18,8 @@ class Tester:
 	def assign(self, name, data):
 		 self.tasks[name] = data
 
-		 
 	
+		
 def load_testers_to_df():
 	"""
 	:param path - path to the file where testers data are stored
